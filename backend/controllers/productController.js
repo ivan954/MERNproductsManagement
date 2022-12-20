@@ -1,20 +1,24 @@
 import Product from "../model/productModel.js";
 
+//@desc Fetch all products
+//@route Get /api/products
 const getAllProducts = async (req, res, next) => {
-  let product;
+  let products;
   try {
-    product = await Product.find();
+    products = await Product.find();
   } catch (error) {
     console.log(error.message);
   }
 
-  if (!product) {
+  if (!products) {
     return res.status(404).json({ message: "NO PRODUCT found" });
   }
 
-  return res.status(200).json({ product });
+  return res.status(200).json({ products });
 };
 
+//@desc Fetch singel product
+//@route Get /api/products/:id
 const getProductById = async (req, res, next) => {
   let product;
   const id = req.params.id;
@@ -28,9 +32,11 @@ const getProductById = async (req, res, next) => {
     return res.status(404).json({ message: "NO PRODUCT found" });
   }
 
-  return res.status(200).json({ product });
+  return res.status(200).json(product);
 };
 
+//@desc Create a product
+//@route POST /api/products
 const createProduct = async (req, res, next) => {
   let product;
   const {
@@ -39,6 +45,7 @@ const createProduct = async (req, res, next) => {
     description,
     productType,
     marketingData,
+    price,
     image,
   } = req.body;
   try {
@@ -48,8 +55,14 @@ const createProduct = async (req, res, next) => {
       description: description,
       productType: productType,
       marketingData: marketingData,
+      price: price,
       image: image,
     });
+    if (name === "" || catalogNumber === "" || price === "") {
+      return res
+        .status(500)
+        .json({ message: "Name Catalog Number and Price required !!!" });
+    }
 
     await product.save();
   } catch (error) {
@@ -61,6 +74,8 @@ const createProduct = async (req, res, next) => {
   return res.status(201).json({ product });
 };
 
+//@desc Update a product
+//@route PUT /api/products/:id
 const updateProduct = async (req, res, next) => {
   let product;
   const id = req.params.id;
@@ -70,6 +85,7 @@ const updateProduct = async (req, res, next) => {
     description,
     productType,
     marketingData,
+    price,
     image,
   } = req.body;
   try {
@@ -79,6 +95,7 @@ const updateProduct = async (req, res, next) => {
       description: description,
       productType: productType,
       marketingData: marketingData,
+      price: price,
       image: image,
     });
 
@@ -92,6 +109,8 @@ const updateProduct = async (req, res, next) => {
   return res.status(200).json({ product });
 };
 
+//@desc Delete a product
+//@route Delete /api/products/:id
 const deleteProduct = async (req, res, next) => {
   const id = req.params.id;
   let product;

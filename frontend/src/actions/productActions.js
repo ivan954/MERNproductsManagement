@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
@@ -16,34 +17,29 @@ import {
   PRODUCT_UPDATE_SUCCESS,
   PRODUCT_UPDATE_FAIL,
 } from "../constants/productConstants";
-import { logout } from "./userActions";
 
 const PORT = process.env.REACT_APP_PORT || 5000;
 
-export const listProducts =
-  (keyword = "", pageNumber = "") =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: PRODUCT_LIST_REQUEST });
+export const listProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_LIST_REQUEST });
 
-      const { data } = await axios.get(
-        `http://localhost:${PORT}/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
-      );
+    const { data } = await axios.get(`http://localhost:${PORT}/api/products`);
 
-      dispatch({
-        type: PRODUCT_LIST_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: PRODUCT_LIST_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    dispatch({
+      type: PRODUCT_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
 export const listProductDetails = (id) => async (dispatch) => {
   try {
@@ -74,15 +70,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
       type: PRODUCT_DELETE_REQUEST,
     });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {},
-    };
-
-    await axios.delete(`http://localhost:${PORT}/api/products/${id}`, config);
+    await axios.delete(`http://localhost:${PORT}/api/products/${id}`);
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -92,9 +80,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
-    if (message === "Not authorized, token failed") {
-      dispatch(logout());
-    }
+
     dispatch({
       type: PRODUCT_DELETE_FAIL,
       payload: message,
@@ -102,54 +88,57 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
   }
 };
 
-export const createProduct = () => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: PRODUCT_CREATE_REQUEST,
-    });
+export const createProduct =
+  (
+    name,
+    catalogNumber,
+    price,
+    description,
+    productType,
+    marketingData,
+    image
+  ) =>
+  async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PRODUCT_CREATE_REQUEST,
+      });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const { data } = await axios.post(
+        `http://localhost:${PORT}/api/products`,
+        {
+          name,
+          catalogNumber,
+          price,
+          description,
+          productType,
+          marketingData,
+          image,
+        }
+      );
 
-    const config = {
-      headers: {},
-    };
+      dispatch({
+        type: PRODUCT_CREATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
 
-    const { data } = await axios.post(
-      `http://localhost:${PORT}/api/products`,
-      {},
-      config
-    );
-
-    dispatch({
-      type: PRODUCT_CREATE_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    if (message === "Not authorized, token failed") {
-      dispatch(logout());
+      dispatch({
+        type: PRODUCT_CREATE_FAIL,
+        payload: message,
+      });
     }
-    dispatch({
-      type: PRODUCT_CREATE_FAIL,
-      payload: message,
-    });
-  }
-};
+  };
 
 export const updateProduct = (product) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_UPDATE_REQUEST,
     });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
 
     const config = {
       headers: {
