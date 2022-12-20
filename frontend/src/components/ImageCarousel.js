@@ -1,7 +1,7 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
 
-//with filter checking if the product has image, only picyures are showing
+//with filter checking if the product has image, only pictures are showing
 
 const ImageCarousel = ({ products }) => {
   return (
@@ -22,9 +22,9 @@ const ImageCarousel = ({ products }) => {
             />
 
             <Carousel.Caption>
-              <h5 className="p-3 mb-2 bg-light text-dark opacity-75 rounded">
+              <p className="bg-dark text-light opacity-75 rounded">
                 {product.description}
-              </h5>
+              </p>
             </Carousel.Caption>
           </Carousel.Item>
         ))}

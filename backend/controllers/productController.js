@@ -61,7 +61,7 @@ const createProduct = async (req, res, next) => {
     if (name === "" || catalogNumber === "" || price === "") {
       return res
         .status(500)
-        .json({ message: "Name Catalog Number and Price required !!!" });
+        .json({ message: "Name ,Catalog Number ,Price required !!!" });
     }
 
     await product.save();

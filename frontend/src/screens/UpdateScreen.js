@@ -1,4 +1,3 @@
-import axios from "axios";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -15,8 +14,6 @@ import {
 import { PRODUCT_UPDATE_RESET } from "../constants/productConstants";
 
 const UpdateScreen = () => {
-  const [uploading, setUploading] = useState(false);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -64,9 +61,11 @@ const UpdateScreen = () => {
   };
   useEffect(() => {
     if (successUpdate) {
+      //Reset the inputs on updateScreen
       dispatch({ type: PRODUCT_UPDATE_RESET });
       navigate("/manage");
     } else {
+      //get the product if didnt got it or the id didnt match
       if (!product || product._id !== id) {
         dispatch(listProductDetails(id));
       } else {
@@ -187,8 +186,6 @@ const UpdateScreen = () => {
                 value={image ?? ""}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
-
-              {uploading && <Loader />}
             </Form.Group>
             <br />
             <div>

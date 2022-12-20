@@ -2,13 +2,13 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteProduct } from "../actions/productActions";
 import Pagination from "./Pagination";
 
 const Product = ({ searchTerm }) => {
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { products } = productList;
   const [searchText, setSearchText] = useState("");
 
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const Product = ({ searchTerm }) => {
     if (currentPage !== 1) {
       setCurrentPage(1);
     }
-  }, [searchTerm]);
+  }, [searchTerm, dispatch, currentPage]);
 
   return (
     <>

@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Row,
-  Col,
-  Container,
-  Button,
-  InputGroup,
-  FormControl,
-} from "react-bootstrap";
+import { Row, Col, Container, InputGroup, FormControl } from "react-bootstrap";
 import { listProducts } from "../actions/productActions";
 import Product from "../components/Product";
 import Loader from "../components/Loader.js";
@@ -25,7 +18,7 @@ const ManageScreen = () => {
   } = productDelete;
 
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error } = productList;
 
   useEffect(() => {
     dispatch(listProducts());

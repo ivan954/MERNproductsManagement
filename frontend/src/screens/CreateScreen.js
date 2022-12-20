@@ -6,7 +6,7 @@ import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { createProduct } from "../actions/productActions";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
 
 const CreateScreen = () => {
@@ -48,13 +48,12 @@ const CreateScreen = () => {
       alert("Product Created !");
       navigate("/manage");
     }
-  }, [successCreate, navigate]);
+  }, [successCreate, navigate, dispatch]);
 
   return (
     <Container>
       <FormContainer>
         <h1>Create Product</h1>
-
         {loadingCreate ? (
           <Loader />
         ) : (
