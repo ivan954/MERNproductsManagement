@@ -38,7 +38,7 @@ const Product = ({ searchTerm }) => {
     if (currentPage !== 1) {
       setCurrentPage(1);
     }
-  }, [searchTerm, dispatch, currentPage]);
+  }, [searchTerm, dispatch]);
 
   return (
     <>
