@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// default value for data is 7 days before today, 604800000 = 7 days in milliseconds
 let date = new Date(Date.now() - 604800000);
 
 const ProductSchema = new Schema({
